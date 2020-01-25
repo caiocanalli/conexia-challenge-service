@@ -1,7 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector" Version="4.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Conexia.Challenge.Application\Conexia.Challenge.Application.csproj" />
+    <ProjectReference Include="..\Conexia.Challenge.Infra.Data\Conexia.Challenge.Infra.Data.csproj" />
+    <ProjectReference Include="..\Conexia.Challenge.Infra.IoC\Conexia.Challenge.Infra.IoC.csproj" />
+  </ItemGroup>
 
 </Project>
