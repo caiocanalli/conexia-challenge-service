@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conexia.Challenge.Infra.Boo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conexia.Challenge.Services.Api", "src\Conexia.Challenge.Services.Api\Conexia.Challenge.Services.Api.csproj", "{78CE1443-406A-42AF-AB17-EB5EE8FC4E42}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conexia.Challenge.Infra.Framework", "src\Conexia.Challenge.Infra.Framework\Conexia.Challenge.Infra.Framework.csproj", "{2D223A68-D55C-4A20-B562-9FBB2BD2A12E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conexia.Challenge.Infra.Logging", "src\Conexia.Challenge.Infra.Logging\Conexia.Challenge.Infra.Logging.csproj", "{174FEDE9-BD6D-4573-A3AA-9C4E8983EE4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,14 @@ Global
 		{78CE1443-406A-42AF-AB17-EB5EE8FC4E42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78CE1443-406A-42AF-AB17-EB5EE8FC4E42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78CE1443-406A-42AF-AB17-EB5EE8FC4E42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D223A68-D55C-4A20-B562-9FBB2BD2A12E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D223A68-D55C-4A20-B562-9FBB2BD2A12E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D223A68-D55C-4A20-B562-9FBB2BD2A12E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D223A68-D55C-4A20-B562-9FBB2BD2A12E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{174FEDE9-BD6D-4573-A3AA-9C4E8983EE4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{174FEDE9-BD6D-4573-A3AA-9C4E8983EE4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{174FEDE9-BD6D-4573-A3AA-9C4E8983EE4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{174FEDE9-BD6D-4573-A3AA-9C4E8983EE4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +78,8 @@ Global
 		{DB98BCEE-6576-4210-BB8F-9F068AEC1467} = {DAE9564D-A8BA-468D-9895-EF37F18FD025}
 		{2B33E918-8D7F-494B-B5A7-80068440B6AB} = {DAE9564D-A8BA-468D-9895-EF37F18FD025}
 		{78CE1443-406A-42AF-AB17-EB5EE8FC4E42} = {C550EBB0-9C3E-40C1-A4DB-833DC1BC85FB}
+		{2D223A68-D55C-4A20-B562-9FBB2BD2A12E} = {DAE9564D-A8BA-468D-9895-EF37F18FD025}
+		{174FEDE9-BD6D-4573-A3AA-9C4E8983EE4B} = {DAE9564D-A8BA-468D-9895-EF37F18FD025}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06CD4D09-756F-429E-A1D1-4CDA7AC33E3D}
