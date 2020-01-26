@@ -1,4 +1,6 @@
-﻿namespace Conexia.Challenge.Domain.Documents.Enums
+﻿using System.ComponentModel;
+
+namespace Conexia.Challenge.Domain.Documents.Enums
 {
     public enum DocumentType
     {

@@ -7,10 +7,16 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="MassTransit" Version="6.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.1.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.6.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Conexia.Challenge.Domain\Conexia.Challenge.Domain.csproj" />
+    <ProjectReference Include="..\Conexia.Challenge.Infra.Framework\Conexia.Challenge.Infra.Framework.csproj" />
+    <ProjectReference Include="..\Conexia.Challenge.Infra.Logging\Conexia.Challenge.Infra.Logging.csproj" />
   </ItemGroup>
 
 </Project>

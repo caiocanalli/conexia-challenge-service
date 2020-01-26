@@ -20,6 +20,8 @@ namespace Conexia.Challenge.Services.Api
             services.AddSimpleInjectorConfig();
             services.AddSwaggerConfig();
             services.AddMassTransitConfig(Configuration);
+            services.AddAuthenticationConfig(Configuration);
+            services.AddAuthorizationConfig();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -28,10 +30,16 @@ namespace Conexia.Challenge.Services.Api
             app.UseCustomSwaggerConfig();
             app.UseRouting();
             app.UseAuthorization();
+            app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+            app.UseCors(option =>
+                option.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
         }
     }
 }

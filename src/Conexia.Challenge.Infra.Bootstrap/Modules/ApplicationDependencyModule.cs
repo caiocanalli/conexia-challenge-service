@@ -5,6 +5,8 @@ using Conexia.Challenge.Application.Documents.Services.Interfaces;
 using Conexia.Challenge.Application.Documents.Strategies;
 using Conexia.Challenge.Application.Documents.Strategies.Types;
 using Conexia.Challenge.Application.Documents.Strategies.Types.Interfaces;
+using Conexia.Challenge.Application.Users.Services;
+using Conexia.Challenge.Application.Users.Services.Interfaces;
 using Conexia.Challenge.Infra.IoC;
 using SimpleInjector;
 
@@ -36,6 +38,12 @@ namespace Conexia.Challenge.Infra.Bootstrap.Modules
 
             container.Register<CsvStrategy>(Lifestyle.Scoped);
             container.Register<XlsStrategy>(Lifestyle.Scoped);
+
+            // User
+
+            container.Register<
+                IUserAppService,
+                UserAppService>(Lifestyle.Scoped);
         }
     }
 }

@@ -12,7 +12,8 @@ namespace Conexia.Challenge.Services.Api.Extensions
     public static class MassTransitExtension
     {
         public static void AddMassTransitConfig(
-            this IServiceCollection services, IConfiguration configuration)
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddMassTransit(x =>
             {

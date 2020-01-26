@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Conexia.Challenge.Application.Exceptions
+namespace Conexia.Challenge.Application.Infrastructure.Exceptions
 {
     public class ApplicationLayerException : Exception
     {

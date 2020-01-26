@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Conexia.Challenge.Application.Documents.Mappers;
+using Conexia.Challenge.Application.Users.Mappers;
 using Conexia.Challenge.Infra.IoC;
 using SimpleInjector;
 
@@ -14,6 +15,7 @@ namespace Conexia.Challenge.Infra.Bootstrap.Modules
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new DocumentProfile());
+                cfg.AddProfile(new UserProfile());
             });
 
             container.RegisterInstance<IConfigurationProvider>(config);

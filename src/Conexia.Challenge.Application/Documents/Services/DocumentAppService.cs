@@ -3,14 +3,20 @@ using Conexia.Challenge.Application.Documents.Factories.Types.Interfaces;
 using Conexia.Challenge.Application.Documents.Requests;
 using Conexia.Challenge.Application.Documents.Responses;
 using Conexia.Challenge.Application.Documents.Services.Interfaces;
-using Conexia.Challenge.Application.Exceptions;
+using Conexia.Challenge.Application.Infrastructure.Exceptions;
 using Conexia.Challenge.Domain;
 using Conexia.Challenge.Domain.Documents;
 using Conexia.Challenge.Domain.Documents.Enums;
 using Conexia.Challenge.Domain.Documents.Interfaces;
+using Conexia.Challenge.Infra.Framework.Contracts;
+using Conexia.Challenge.Infra.Logging.Interfaces;
 using MassTransit;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Conexia.Challenge.Application.Documents.Services
@@ -22,51 +28,62 @@ namespace Conexia.Challenge.Application.Documents.Services
         readonly IDocumentService _documentService;
         readonly IUnitOfWorkFactory _unitOfWorkFactory;
         readonly ITypeFactory _typeFactory;
+        readonly ILoggerAdapter<DocumentAppService> _logger;
+
+        readonly string _documentPath = string.Empty;
 
         readonly Dictionary<DocumentSituation, Func<int, Task>> _situationsToProcess;
+        readonly Dictionary<string, DocumentType> _validDocumentTypes;
 
         public DocumentAppService(
             IBus bus,
             IMapper mapper,
             IDocumentService documentService,
             IUnitOfWorkFactory unitOfWorkFactory,
-            ITypeFactory typeFactory)
+            ITypeFactory typeFactory,
+            ILoggerAdapter<DocumentAppService> logger,
+            IHostingEnvironment hostingEnvironment)
         {
             _bus = bus;
             _mapper = mapper;
             _documentService = documentService;
             _unitOfWorkFactory = unitOfWorkFactory;
             _typeFactory = typeFactory;
+            _logger = logger;
+
+            _documentPath = Path.Combine(hostingEnvironment.WebRootPath, "docs");
 
             _situationsToProcess = new Dictionary<DocumentSituation, Func<int, Task>>
             {
                 { DocumentSituation.Approved, ApprovedAsync },
                 { DocumentSituation.Disapproved, DisapprovedAsync }
             };
+
+            _validDocumentTypes = new Dictionary<string, DocumentType>
+            {
+                { "csv", DocumentType.Csv },
+                { "xls", DocumentType.Xls },
+                { "xlsx", DocumentType.Xls }
+            };
         }
 
         public async Task UploadAsync(UploadRequest request)
         {
-            // Realizar upload do arquivo para S3
-
             using (var unitOfWork = _unitOfWorkFactory.StartUnitOfWork())
             {
                 try
                 {
-                    var document = new Document
-                    {
-                        Name = request.Name,
-                        Type = DocumentType.Csv // Get Type from file
-                    };
-
-                    await _documentService.AddAsync(document);
+                    await RegisterDocumentAsync(request.Name, request.File);
 
                     unitOfWork.Commit();
                 }
                 catch (Exception ex)
                 {
-                    // Log information
                     unitOfWork.Rollback();
+
+                    _logger.LogError(ex, $"Error on upload Document");
+
+                    throw;
                 }
             }
         }
@@ -87,12 +104,12 @@ namespace Conexia.Challenge.Application.Documents.Services
 
         public async Task UpdateAsync(UpdateRequest request)
         {
-            if (!_situationsToProcess.TryGetValue(request.Situation, out var SituationToProcess))
+            if (_situationsToProcess.TryGetValue(request.Situation, out var SituationToProcess))
             {
-                throw new ApplicationLayerException();
+                await SituationToProcess(request.Id);
             }
 
-            await SituationToProcess(request.Id);
+            throw new ApplicationLayerException();
         }
 
         public async Task EvaluateAsync(int id)
@@ -110,13 +127,34 @@ namespace Conexia.Challenge.Application.Documents.Services
 
                 if (strategy == null)
                 {
-                    // Log information
                     return;
                 }
 
                 await strategy.ProcessAsync();
 
                 unitOfWork.Commit();
+            }
+        }
+
+        async Task RegisterDocumentAsync(string name, IFormFile file)
+        {
+            var document = new Document
+            {
+                Name = name,
+                Type = GetDocumentType(file.FileName)
+            };
+
+            await _documentService.AddAsync(document);
+            await SaveDocumentAsync(document.Id, file);
+        }
+
+        async Task SaveDocumentAsync(int id, IFormFile file)
+        {
+            var filePath = $"{_documentPath}{id}";
+
+            using (var stream = File.Create(filePath))
+            {
+                await file.CopyToAsync(stream);
             }
         }
 
@@ -138,11 +176,19 @@ namespace Conexia.Challenge.Application.Documents.Services
                     await _documentService.UpdateAsync(document);
 
                     unitOfWork.Commit();
+
+                    await _bus.Publish<EvaluateDocumentEvent>(new
+                    {
+                        Id = id
+                    });
                 }
                 catch (Exception ex)
                 {
-                    // Log information
                     unitOfWork.Rollback();
+
+                    _logger.LogError(ex, $"Error on Approved Document");
+
+                    throw;
                 }
             }
         }
@@ -168,10 +214,25 @@ namespace Conexia.Challenge.Application.Documents.Services
                 }
                 catch (Exception ex)
                 {
-                    // Log Information
                     unitOfWork.Rollback();
+
+                    _logger.LogError(ex, $"Error on Disapproved Document");
+
+                    throw;
                 }
             }
+        }
+
+        DocumentType GetDocumentType(string fileName)
+        {
+            string extension = Path.GetExtension(fileName);
+
+            if (_validDocumentTypes.TryGetValue(extension, out var documentType))
+            {
+                return documentType;
+            }
+
+            throw new ApplicationLayerException();
         }
     }
 }
