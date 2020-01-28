@@ -93,7 +93,12 @@ namespace Conexia.Challenge.Application.Documents.Services
             using (_unitOfWorkFactory.StartUnitOfWork())
             {
                 var result = await _documentService.FilterAsync(
-                    request.Page, request.PageSize, request.Name);
+                    request.Page,
+                    request.PageSize,
+                    request.Name,
+                    DocumentType.Csv,
+                    DocumentStatus.ToProcess,
+                    DocumentSituation.Disapproved);
 
                 FilterResponse response =
                     _mapper.Map<FilterResponse>(result);
@@ -141,11 +146,11 @@ namespace Conexia.Challenge.Application.Documents.Services
             var document = new Document
             {
                 Name = name,
-                Type = GetDocumentType(file.FileName)
+                Type = DocumentType.Csv//GetDocumentType(file.FileName)
             };
 
             await _documentService.AddAsync(document);
-            await SaveDocumentAsync(document.Id, file);
+            //await SaveDocumentAsync(document.Id, file);
         }
 
         async Task SaveDocumentAsync(int id, IFormFile file)

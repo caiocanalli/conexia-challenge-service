@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Conexia.Challenge.Infra.IoC\Conexia.Challenge.Infra.IoC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

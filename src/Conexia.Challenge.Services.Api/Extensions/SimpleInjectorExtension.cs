@@ -25,6 +25,8 @@ namespace Conexia.Challenge.Services.Api.Extensions
                     .AddLogging();
             });
 
+            services.UseSimpleInjectorAspNetRequestScoping(_container);
+
             RegisterDependencies();
         }
 

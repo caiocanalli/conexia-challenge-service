@@ -1,5 +1,6 @@
 ﻿using Conexia.Challenge.Domain;
 using Conexia.Challenge.Domain.Documents;
+using Conexia.Challenge.Domain.Documents.Enums;
 using Conexia.Challenge.Domain.Documents.Interfaces;
 using Conexia.Challenge.Domain.Models;
 using Conexia.Challenge.Infra.Data.Extensions;
@@ -27,10 +28,29 @@ namespace Conexia.Challenge.Infra.Data.Repositories
         public async Task UpdateAsync(Document document) =>
             await _unitOfWork.Current.UpdateAsync(document);
 
-        public async Task<PagedResult<Document>> FilterAsync(int page, int pageSize, string name) =>
-            await _unitOfWork.Current
+        public async Task<PagedResult<Document>> FilterAsync(
+            int page,
+            int pageSize,
+            string name,
+            DocumentType type,
+            DocumentStatus status,
+            DocumentSituation situation)
+        {
+            var documents = _unitOfWork.Current
                 .Query<Document>()
-                .Where(x => x.Name == name)
-                .RecoverPagedAsync(page, pageSize);
+                .AsQueryable();
+
+            if(!string.IsNullOrEmpty(name))
+            {
+                documents = documents.Where(x => x.Name == name);
+            }
+
+            if (type != DocumentType.Unknown)
+            {
+                documents = documents.Where(x => x.Name == name);
+            }
+
+            return await documents.RecoverPagedAsync(page, pageSize);
+        }
     }
 }

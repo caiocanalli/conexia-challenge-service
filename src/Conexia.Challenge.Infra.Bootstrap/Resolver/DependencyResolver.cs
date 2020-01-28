@@ -10,6 +10,7 @@ namespace Conexia.Challenge.Infra.Bootstrap.Resolver
             new AutoMapperDependencyModule().RegisterDependencies();
             new DomainDependencyModule().RegisterDependencies();
             new DataDependencyModule().RegisterDependencies();
+            new LoggerDependencyModule().RegisterDependencies();
         }
     }
 }

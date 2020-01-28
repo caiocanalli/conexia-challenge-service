@@ -1,4 +1,5 @@
 ﻿using Conexia.Challenge.Domain.Core.Exceptions;
+using Conexia.Challenge.Domain.Documents.Enums;
 using Conexia.Challenge.Domain.Documents.Interfaces;
 using Conexia.Challenge.Domain.Documents.Validators;
 using Conexia.Challenge.Domain.Models;
@@ -42,7 +43,14 @@ namespace Conexia.Challenge.Domain.Documents
             await _documentRepository.UpdateAsync(document);
         }
 
-        public async Task<PagedResult<Document>> FilterAsync(int page, int pageSize, string name) =>
-            await _documentRepository.FilterAsync(page, pageSize, name);
+        public async Task<PagedResult<Document>> FilterAsync(
+            int page,
+            int pageSize,
+            string name,
+            DocumentType type,
+            DocumentStatus status,
+            DocumentSituation situation) =>
+            await _documentRepository.FilterAsync(
+                page, pageSize, name, type, status, situation);
     }
 }
